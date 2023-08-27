@@ -2,8 +2,10 @@
     <div class="page">
         <SiteHeader></SiteHeader>
         <div class="container">
-            <!-- <img :src="item.image.url" :alt="item.image.thumbnailUrl"> -->
+            <div class="title">{{ item.title }}</div>
             <div class="discription">
+                <img :src="item.image.url" :alt="item.image.thumbnailUrl">
+                <div class="body">{{ item.body }}</div>
             </div>
         </div>
     </div>
@@ -54,5 +56,23 @@ export default {
 <style>
 .container {
     display: flex;
+    flex-direction: column;
+}
+
+.title {
+    width: 100%;
+    border: 1px solid;
+}
+
+.discription {
+    display: flex;
+    flex-direction: row;
+}
+
+.image {
+    float: left;
+    margin-right: 15px;
+    width: 150px;
+    height: 150px;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
     <div class="header-background">
         <button class="header-button" @click="$router.push('/')">Главная</button>
+        <button class="header-button" @click="$router.push('/catalog')">Католог</button>
     </div>
 </template>
 <script>
