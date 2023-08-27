@@ -4,7 +4,7 @@
         <div class="container">
             <div class="title">{{ item.title }}</div>
             <div class="discription">
-                <img :src="item.image.url" :alt="item.image.thumbnailUrl">
+                <img class="item-image" :src="item.image.url" :alt="item.image.thumbnailUrl">
                 <div class="body">{{ item.body }}</div>
             </div>
         </div>
@@ -69,7 +69,7 @@ export default {
     flex-direction: row;
 }
 
-.image {
+.item-image {
     float: left;
     margin-right: 15px;
     width: 150px;
