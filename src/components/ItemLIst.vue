@@ -28,7 +28,7 @@ export default {
 .item {
     align-content: center;
     padding: 15px;
-    margin-top: 15px;
+    margin-bottom: 15px;
     width: 100%;
     border: 1px solid;
     border-radius: 10px;
