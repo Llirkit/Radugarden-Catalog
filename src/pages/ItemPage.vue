@@ -4,7 +4,7 @@
         <div class="container">
             <div class="title">{{ item.title }}</div>
             <div class="discription">
-                <img class="item-image" :src="item.image.url" :alt="item.image.thumbnailUrl">
+                <img class="item-image" :src="item.image.url">
                 <div class="body">{{ item.body }}</div>
             </div>
         </div>
@@ -19,7 +19,7 @@ export default {
         }
     },
     methods: {
-        async getItem(id) {
+        async getItemById(id) {
             try {
                 const response = await axios("https://jsonplaceholder.typicode.com/posts", {
                     params: {
@@ -47,9 +47,8 @@ export default {
 
         }
     },
-    mounted() {
-        this.getItem(this.$route.params.id)
-        console.log("asdads")
+    beforeMount() {
+        this.getItemById(this.$route.params.id)
     }
 }
 </script>
@@ -62,6 +61,10 @@ export default {
 .title {
     width: 100%;
     border: 1px solid;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: 3px;
+    padding: 5px;
 }
 
 .discription {
@@ -71,6 +74,7 @@ export default {
 
 .item-image {
     float: left;
+    margin-left: 5px;
     margin-right: 15px;
     width: 150px;
     height: 150px;

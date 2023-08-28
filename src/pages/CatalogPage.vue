@@ -1,6 +1,10 @@
 <template>
     <div @click="$r">
         <SiteHeader class="siteheader"></SiteHeader>
+        <div class="sort">
+            Сортировка
+            <SelectList style="margin-left: 10px;" v-model="selectedSort" :options="sortOptions"></SelectList>
+        </div>
         <ItemList :items="items"></ItemList>
     </div>
 </template>
@@ -14,6 +18,12 @@ export default {
     data() {
         return {
             items: [],
+            selectedSort: '',
+            sortOptions: [
+                {value: 'title', name: 'По названию'},
+                {value: 'body', name: 'По содержимому'},
+                {value: 'id', name: 'По id'},
+            ],
         }
     },
     methods: {
@@ -49,7 +59,25 @@ export default {
     },
     mounted() {
         this.getItems(10)
+    },
+    watch: {
+        selectedSort(newValue) {
+            this.items.sort((item1,item2) => {
+                switch (newValue) {
+                    case 'id':
+                        return item1[newValue]>item2[newValue] ? 1 : -1                
+                    default:
+                        return item1[newValue]?.localeCompare(item2[newValue])
+                }
+                
+            })
+        }
     }
 }
 </script>
-<style></style>
+<style>
+.sort {
+    display: flex;
+    margin: 10px 0px 0px 10px;
+}
+</style>
