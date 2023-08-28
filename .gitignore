@@ -18,7 +18,7 @@ coverage
 /cypress/screenshots/
 
 # Editor directories and files
-package-lock.json
+/package-lock.json
 .vscode
 .vscode/*
 !.vscode/extensions.json
