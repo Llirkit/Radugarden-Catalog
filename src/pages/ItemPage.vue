@@ -39,7 +39,6 @@ export default {
                         }
 
                     })
-                console.log(response)
                 this.item = response
             } catch (error) {
                 alert(error)
