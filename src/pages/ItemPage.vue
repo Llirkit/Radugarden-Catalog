@@ -2,52 +2,25 @@
     <div class="page">
         <SiteHeader></SiteHeader>
         <div class="container">
-            <div class="title">{{ item.title }}</div>
+            <div class="title">{{ item?.value?.title }}</div>
             <div class="discription">
-                <img class="item-image" :src="item.image.url">
-                <div class="body">{{ item.body }}</div>
+                <img class="item-image" :src="item?.value?.image?.url">
+                <div class="body">{{ item?.value?.body }}</div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import axios from 'axios';
+import { useRequest } from '../hooks/useRequest';
+import { useRoute } from 'vue-router'
+import { reactive } from "vue";
 export default {
-    data() {
+    setup() {
+        const route = useRoute()
+        const {item} = reactive(useRequest(route.params?.id))
         return {
-            item: {},
+            item,
         }
-    },
-    methods: {
-        async getItemById(id) {
-            try {
-                const response = await axios("https://jsonplaceholder.typicode.com/posts", {
-                    params: {
-                        id: id,
-                    }
-                }).then((res) => res.data[0])
-                    .then(async (res) => {
-                        try {
-                            res.image = await axios("https://jsonplaceholder.typicode.com/photos", {
-                                params: {
-                                    id: id,
-                                }
-                            }).then(res => res.data[0])
-                            return res
-                        } catch (error) {
-                            alert(error)
-                        }
-
-                    })
-                this.item = response
-            } catch (error) {
-                alert(error)
-            }
-
-        }
-    },
-    beforeMount() {
-        this.getItemById(this.$route.params.id)
     }
 }
 </script>

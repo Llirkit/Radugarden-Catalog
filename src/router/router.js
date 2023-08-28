@@ -15,7 +15,7 @@ const routes = [
     {
         path: '/catalog',
         component: CatalogPage
-    }
+    },
 ]
 const router = createRouter({
     routes,

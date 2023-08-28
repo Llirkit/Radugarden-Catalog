@@ -1,9 +1,9 @@
 <template>
-    <div @click="$r">
+    <div>
         <SiteHeader class="siteheader"></SiteHeader>
         <div class="sort">
             Сортировка
-            <SelectList style="margin-left: 10px;" v-model="selectedSort" :options="sortOptions"></SelectList>
+            <SelectList style="margin-left: 10px;" @updated="selectedSort" :options="sortOptions"></SelectList>
         </div>
         <div class="buttons">
             <site-button @click="prevPage">Prev Pg</site-button>
@@ -25,7 +25,6 @@ export default {
             page: 1,
             limit: 10,
             totalPages: 0,
-            selectedSort: '',
             sortOptions: [
                 {value: 'title', name: 'По названию'},
                 {value: 'body', name: 'По содержимому'},
@@ -34,6 +33,17 @@ export default {
         }
     },
     methods: {
+        selectedSort(newValue) {
+            this.items.sort((item1,item2) => {
+                switch (typeof item1[newValue]) {
+                    case 'number':
+                        return item1[newValue]>item2[newValue] ? 1 : -1                
+                    default:
+                        return item1[newValue]?.localeCompare(item2[newValue])
+                }
+                
+            })
+        },
         async getPicture() {
             try {
                 const response = await axios.get("https://jsonplaceholder.typicode.com/photos", {
@@ -82,20 +92,10 @@ export default {
         },
     },
     mounted() {
-        this.getItems(10)
+        this.getItems(this.limit)
     },
     watch: {
-        selectedSort(newValue) {
-            this.items.sort((item1,item2) => {
-                switch (typeof item1[newValue]) {
-                    case 'number':
-                        return item1[newValue]>item2[newValue] ? 1 : -1                
-                    default:
-                        return item1[newValue]?.localeCompare(item2[newValue])
-                }
-                
-            })
-        }
+        
     }
 }
 </script>
