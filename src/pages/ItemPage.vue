@@ -1,7 +1,5 @@
 <template>
     <div class="page">
-        <SiteHeader></SiteHeader>
-        <q-bogus @show="doSomething" @hide="doSomethingElse" />
         <div class="container">
             <div class="title">{{ item?.value?.title }}</div>
             <div class="discription">
@@ -12,18 +10,16 @@
     </div>
 </template>
 <script setup>
-import { useRequest } from '../hooks/useRequest';
-import { useRoute } from 'vue-router'
-import { reactive } from "vue";
+
+    import { useRequest } from '../hooks/useRequest';
+    import { useRoute } from 'vue-router'
+    import { reactive } from "vue";
+
     const route = useRoute()
     const {item} = reactive(useRequest(route.params?.id))
-    function doSomething () {
-        alert("1")
-    }
-    function doSomethingElse () {
-        alert("2")
-    }
+
 </script>
+
 <style>
 .container {
     display: flex;

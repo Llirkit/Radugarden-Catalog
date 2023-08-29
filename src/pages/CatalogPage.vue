@@ -1,20 +1,22 @@
 <template>
+    <q-toolbar class="bg-info text-white">
+        <div class="q-pa-lg flex flex-center">
+            <q-pagination
+            v-model="current"
+            @update:model-value ="(value) => getItems(value)"
+            :max="totalPages"
+            direction-links
+            />
+        </div>
+    </q-toolbar>
     <div>
-        <SiteHeader class="siteheader"></SiteHeader>
-        <div class="sort">
-            Сортировка
-            <SelectList style="margin-left: 10px;" @updated="selectedSort" :options="sortOptions"></SelectList>
-        </div>
-        <div class="buttons">
-            <site-button @click="prevPage">Prev Pg</site-button>
-            <site-button @click="nextPage">Next Pg</site-button>
-        </div>
         <ItemList :items="items"></ItemList>
     </div>
 </template>
 <script>
 import ItemList from '@/components/ItemList.vue'
 import axios from "axios";
+import { ref } from 'vue';
 export default {
     components: {
         ItemList,
@@ -22,7 +24,6 @@ export default {
     data() {
         return {
             items: [],
-            page: 1,
             limit: 10,
             totalPages: 0,
             sortOptions: [
@@ -30,6 +31,11 @@ export default {
                 {value: 'body', name: 'По содержимому'},
                 {value: 'id', name: 'По id'},
             ],
+        }
+    },
+    setup () {
+        return {
+            current: ref(1)
         }
     },
     methods: {
@@ -44,12 +50,12 @@ export default {
                 
             })
         },
-        async getPicture() {
+        async getPicture(page) {
             try {
                 const response = await axios.get("https://jsonplaceholder.typicode.com/photos", {
                     params: {
                         _limit: this.limit,
-                        _page: this.page,
+                        _page: page,
                     }
                 })
                 return response.data
@@ -58,15 +64,15 @@ export default {
             }
 
         },
-        async getItems() {
+        async getItems(page) {
             try {
                 const response = await axios.get("https://jsonplaceholder.typicode.com/posts", {
                     params: {
                         _limit: this.limit,
-                        _page: this.page,
+                        _page: page,
                     }
                 })
-                let images = await this.getPicture(this.limit);
+                let images = await this.getPicture(page);
                 for (const image in images) {
                     response.data[image].image = images[image];
                 }
@@ -76,23 +82,9 @@ export default {
                 alert(error)
             }
         },
-        prevPage() {
-            if(this.page === 1)
-                this.page = this.totalPages
-            else
-                this.page--
-            this.getItems()
-        },
-        nextPage() {
-            if(this.page === this.totalPages)
-                this.page = 1
-            else
-                this.page++
-            this.getItems()
-        },
     },
     mounted() {
-        this.getItems(this.limit)
+        this.getItems(this.current)
     },
     watch: {
         
@@ -100,13 +92,4 @@ export default {
 }
 </script>
 <style>
-.sort {
-    display: flex;
-    margin: 10px 0px 0px 10px;
-}
-.buttons {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 0px;
-}
 </style>
