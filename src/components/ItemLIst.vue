@@ -2,6 +2,7 @@
   <div class="item-list">
     <div class="item" v-for="item in items" :key="item.id">
       <q-card class="my-card">
+        <router-link class="itemlink" :to="'/item/'+item.id">
         <q-card-section horizontal>
           <q-img :src="item.image.url" width="250px" height="250px" />
 
@@ -10,7 +11,7 @@
             {{ item.body }}
           </q-card-section>
         </q-card-section>
-
+      </router-link>
         <q-separator />
       </q-card>
     </div>
@@ -47,4 +48,10 @@ export default {
   max-width: 150px;
   max-height: 150px;
 }
+
+.itemlink {
+  text-decoration: none;
+  color:black
+}
+
 </style>
