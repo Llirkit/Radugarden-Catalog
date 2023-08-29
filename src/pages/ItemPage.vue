@@ -10,19 +10,13 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
 import { useRequest } from '../hooks/useRequest';
 import { useRoute } from 'vue-router'
 import { reactive } from "vue";
-export default {
-    setup() {
         const route = useRoute()
         const {item} = reactive(useRequest(route.params?.id))
-        return {
-            item,
-        }
-    }
-}
+
 </script>
 <style>
 .container {
