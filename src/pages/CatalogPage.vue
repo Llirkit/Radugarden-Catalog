@@ -7,11 +7,28 @@
         :max="totalPages"
         direction-links
       />
+      <q-select
+        filled
+        label="Сортировка"
+        v-model="selectedSort"
+        @update:model-value="
+          (value) => Sort(sortOptions.find((option) => option.name === value).value)
+        "
+        :options="sortOptions.map((option) => option.name)"
+      />
     </div>
   </q-toolbar>
   <div>
     <ItemList :items="items"></ItemList>
   </div>
+  <q-toolbar class="bg-info text-white">
+    <q-pagination
+      v-model="current"
+      @update:model-value="(value) => getItems(value)"
+      :max="totalPages"
+      direction-links
+    />
+  </q-toolbar>
 </template>
 <script>
 import ItemList from '@/components/ItemList.vue'
@@ -25,21 +42,22 @@ export default {
     return {
       items: [],
       limit: 10,
-      totalPages: 0,
-      sortOptions: [
-        { value: 'title', name: 'По названию' },
-        { value: 'body', name: 'По содержимому' },
-        { value: 'id', name: 'По id' }
-      ]
+      totalPages: 0
     }
   },
   setup() {
     return {
-      current: ref(1)
+      current: ref(1),
+      sortOptions: [
+        { value: 'title', name: 'По названию' },
+        { value: 'body', name: 'По содержимому' },
+        { value: 'id', name: 'По id' }
+      ],
+      selectedSort: ref('Выберите сортировку')
     }
   },
   methods: {
-    selectedSort(newValue) {
+    Sort(newValue) {
       this.items.sort((item1, item2) => {
         switch (typeof item1[newValue]) {
           case 'number':
@@ -84,7 +102,11 @@ export default {
   mounted() {
     this.getItems(this.current)
   },
-  watch: {}
+  watch: {
+    selectedSort() {
+      this.Sort(this.selectedSort)
+    }
+  }
 }
 </script>
 <style></style>
