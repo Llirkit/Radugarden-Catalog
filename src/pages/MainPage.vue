@@ -1,28 +1,37 @@
 <template>
-   <q-page class="flex flex-center">
-      <q-linear-progress size="35px" :value="progress" :buffer="buffer" color="warning" class="q-mt-sm" />
-   </q-page>
+  <q-page class="flex flex-center">
+    <q-linear-progress
+      size="35px"
+      :value="progress"
+      :buffer="buffer"
+      color="warning"
+      class="q-mt-sm"
+    />
+  </q-page>
 </template>
 <script>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 export default {
-  setup () {
+  setup() {
     const progress = ref(0.01)
     const buffer = ref(0.01)
 
     let interval, bufferInterval
 
     onMounted(() => {
-      interval = setInterval(() => {
-        if (progress.value >= 1) {
-          progress.value = 0.01
-          buffer.value = 0.01
-          return
-        }
+      interval = setInterval(
+        () => {
+          if (progress.value >= 1) {
+            progress.value = 0.01
+            buffer.value = 0.01
+            return
+          }
 
-        progress.value = Math.min(1, buffer.value, progress.value + 0.1)
-      }, 700 + Math.random() * 1000)
+          progress.value = Math.min(1, buffer.value, progress.value + 0.1)
+        },
+        700 + Math.random() * 1000
+      )
 
       bufferInterval = setInterval(() => {
         if (buffer.value < 1) {

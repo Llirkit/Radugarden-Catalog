@@ -3,11 +3,7 @@
     <div class="item" v-for="item in items" :key="item.id">
       <q-card class="my-card">
         <q-card-section horizontal>
-          <q-img
-            :src="item.image.url"
-            width="250px"
-            height="250px"
-          />
+          <q-img :src="item.image.url" width="250px" height="250px" />
 
           <q-card-section class="wrap">
             <div class="text-h6">{{ item.title }}</div>
