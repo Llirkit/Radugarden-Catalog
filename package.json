@@ -11,7 +11,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@quasar/extras": "^1.16.5",
+    "@quasar/extras": "^1.16.6",
     "axios": "^1.4.0",
     "moysklad": "^0.15.0",
     "pinia": "^2.1.6",
