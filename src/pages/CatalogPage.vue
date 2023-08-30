@@ -30,35 +30,23 @@
     />
   </q-toolbar>
 </template>
+
 <script>
 import ItemList from '@/components/ItemList.vue'
 import axios from 'axios'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 export default {
   components: {
     ItemList
   },
-  data() {
-    return {
-      items: [],
-      limit: 10,
-      totalPages: 0
-    }
-  },
+
   setup() {
-    return {
-      current: ref(1),
-      sortOptions: [
-        { value: 'title', name: 'По названию' },
-        { value: 'body', name: 'По содержимому' },
-        { value: 'id', name: 'По id' }
-      ],
-      selectedSort: ref('Выберите сортировку')
-    }
-  },
-  methods: {
-    Sort(newValue) {
-      this.items.sort((item1, item2) => {
+    const items = ref([])
+    const limit = 10
+    const totalPages = ref(0)
+
+    const Sort = (newValue) => {
+      items.value.sort((item1, item2) => {
         switch (typeof item1[newValue]) {
           case 'number':
             return item1[newValue] > item2[newValue] ? 1 : -1
@@ -66,12 +54,13 @@ export default {
             return item1[newValue]?.localeCompare(item2[newValue])
         }
       })
-    },
-    async getPicture(page) {
+    }
+
+    const getPicture = async (page) => {
       try {
         const response = await axios.get('https://jsonplaceholder.typicode.com/photos', {
           params: {
-            _limit: this.limit,
+            _limit: limit,
             _page: page
           }
         })
@@ -79,30 +68,46 @@ export default {
       } catch (error) {
         alert(error)
       }
-    },
-    async getItems(page) {
+    }
+
+    const getItems = async (page) => {
       try {
         const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
           params: {
-            _limit: this.limit,
+            _limit: limit,
             _page: page
           }
         })
-        let images = await this.getPicture(page)
+        let images = await getPicture(page)
         for (const image in images) {
           response.data[image].image = images[image]
         }
-        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
-        this.items = response.data
+        totalPages.value = Math.ceil(response.headers['x-total-count'] / limit)
+        items.value = response.data
       } catch (error) {
         alert(error)
       }
     }
-  },
-  mounted() {
-    this.getItems(this.current)
-  },
 
+    onMounted(() => {
+      getItems(1)
+    })
+
+    return {
+      items,
+      totalPages,
+      current: ref(1),
+      sortOptions: [
+        { value: 'title', name: 'По названию' },
+        { value: 'body', name: 'По содержимому' },
+        { value: 'id', name: 'По id' }
+      ],
+      selectedSort: ref('Выберите сортировку'),
+      Sort,
+      getItems,
+      getPicture,
+    }
+  }
 }
 </script>
 <style></style>
