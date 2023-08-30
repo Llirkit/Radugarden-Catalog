@@ -102,11 +102,7 @@ export default {
   mounted() {
     this.getItems(this.current)
   },
-  watch: {
-    selectedSort() {
-      this.Sort(this.selectedSort)
-    }
-  }
+
 }
 </script>
 <style></style>
