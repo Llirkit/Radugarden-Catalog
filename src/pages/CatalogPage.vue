@@ -11,10 +11,10 @@
         filled
         label="Сортировка"
         v-model="selectedSort"
-        @update:model-value="
-          (value) => Sort(sortOptions.find((option) => option.name === value).value)
-        "
-        :options="sortOptions.map((option) => option.name)"
+        @update:model-value="(model) => Sort(model.value)"
+        :options="sortOptions"
+        :option-value="(option) => option.value"
+        :option-label="(option) => option.name"
       />
     </div>
   </q-toolbar>
