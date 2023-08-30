@@ -2,16 +2,22 @@
   <div class="item-list">
     <div class="item" v-for="item in items" :key="item.id">
       <q-card class="my-card">
-        <router-link class="itemlink" :to="'/item/'+item.id">
-        <q-card-section horizontal>
-          <q-img :src="item.image.url" width="250px" height="250px" />
-
-          <q-card-section class="wrap">
-            <div class="text-h6">{{ item.title }}</div>
-            {{ item.body }}
+        <router-link class="itemlink" :to="'/item/' + item.id">
+          <q-card-section horizontal>
+            <div class="row">
+              <q-img 
+              :src="item.image.url" 
+              ratio="1:1" 
+              fit="fill" 
+              width="250px" 
+              height="250px" />
+            </div>
+            <q-card-section>
+              <div class="text-h6">{{ item.title }}</div>
+              <div>{{ item.body }}</div>
+            </q-card-section>
           </q-card-section>
-        </q-card-section>
-      </router-link>
+        </router-link>
         <q-separator />
       </q-card>
     </div>
@@ -28,30 +34,18 @@ export default {
 }
 </script>
 <style>
-.item-list {
-  display: flex;
-  flex-direction: column;
-}
+
 
 .item {
   align-content: center;
-  padding: 15px;
+  padding: 10px;
   margin-bottom: 15px;
   width: 100%;
-  border: 1px solid;
-  border-radius: 10px;
-}
 
-.item-image {
-  float: left;
-  margin-right: 15px;
-  max-width: 150px;
-  max-height: 150px;
 }
 
 .itemlink {
   text-decoration: none;
-  color:black
+  color: black;
 }
-
 </style>
