@@ -96,7 +96,6 @@ export default {
     return {
       items,
       totalPages,
-      current: ref(1),
       sortOptions: [
         { value: 'title', name: 'По названию' },
         { value: 'body', name: 'По содержимому' },

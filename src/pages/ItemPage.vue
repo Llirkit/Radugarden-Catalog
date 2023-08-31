@@ -1,22 +1,37 @@
+<script setup>
+import axios from 'axios';
+// import { useRequest } from '../hooks/useRequest'
+import { useRoute } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { Notify } from 'quasar';
+
+const route = useRoute()
+const item = ref()
+
+
+const useNotif = () => {
+  Notify.create("Messege")
+}
+onMounted(async () => {
+  const post = await axios.get(`https://jsonplaceholder.typicode.com/posts/${route.params.id}`)
+  item.value = post.data
+  const image = await axios.get(`https://jsonplaceholder.typicode.com/photos/${route.params.id}`)
+  item.value.image = image.data
+})
+</script>
+
 <template>
   <div class="page">
     <div class="container">
-      <div class="title">{{ item?.value?.title }}</div>
+      <q-btn color="primary" icon="check" label="OK" @click="useNotif" />
+      <div class="title">{{ item?.title }}</div>
       <div class="discription">
-        <img class="item-image" :src="item?.value?.image?.url" />
-        <div class="body">{{ item?.value?.body }}</div>
+        <img class="item-image" :src="item?.image?.url" />
+        <div class="body">{{ item?.body }}</div>
       </div>
     </div>
   </div>
 </template>
-<script setup>
-import { useRequest } from '../hooks/useRequest'
-import { useRoute } from 'vue-router'
-import { reactive } from 'vue'
-
-const route = useRoute()
-const { item } = reactive(useRequest(route.params?.id))
-</script>
 
 <style>
 .container {
