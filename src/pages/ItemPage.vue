@@ -1,22 +1,20 @@
 <script setup>
-import axios from 'axios';
-// import { useRequest } from '../hooks/useRequest'
 import { useRoute } from 'vue-router'
 import { ref, onMounted } from 'vue'
-import { Notify } from 'quasar';
+import { Notify } from 'quasar'
+import usePost from '@/hooks/usePost'
 
 const route = useRoute()
 const item = ref()
-
+const picture = ref()
 
 const useNotif = () => {
-  Notify.create("Messege")
+  Notify.create('Messege')
 }
+
 onMounted(async () => {
-  const post = await axios.get(`https://jsonplaceholder.typicode.com/posts/${route.params.id}`)
-  item.value = post.data
-  const image = await axios.get(`https://jsonplaceholder.typicode.com/photos/${route.params.id}`)
-  item.value.image = image.data
+  item.value = await usePost.getItem(route.params.id)
+  picture.value = await usePost.getItemPicture(route.params.id)
 })
 </script>
 
@@ -26,8 +24,16 @@ onMounted(async () => {
       <q-btn color="primary" icon="check" label="OK" @click="useNotif" />
       <div class="title">{{ item?.title }}</div>
       <div class="discription">
-        <img class="item-image" :src="item?.image?.url" />
+        <img class="item-image" :src="picture?.url" />
         <div class="body">{{ item?.body }}</div>
+      </div>
+      <div>
+        <q-btn
+          color="primary"
+          icon="delete"
+          label="Удалить"
+          @click="usePost.deleteItem(item?.id)"
+        />
       </div>
     </div>
   </div>

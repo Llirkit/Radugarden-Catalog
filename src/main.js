@@ -1,8 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import components from '@/components/UI';
 import router from '@/router/router.js'
-import { Notify, Quasar } from 'quasar'
+import { Notify,Dialog, Quasar } from 'quasar'
 
 // Import icon libraries
 import '@quasar/extras/material-icons/material-icons.css'
@@ -12,13 +11,10 @@ import 'quasar/src/css/index.sass'
 
 const myApp = createApp(App)
 
-components.forEach(component => {
-    myApp.component(component.name, component)
-});
-
 myApp.use(Quasar, {
   plugins: {
-    Notify
+    Notify,
+    Dialog
   }, // import Quasar plugins and add here
   
   // config: {
