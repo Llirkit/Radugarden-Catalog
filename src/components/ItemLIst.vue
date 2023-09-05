@@ -1,27 +1,32 @@
 <script setup>
 import { Dialog, Notify } from 'quasar'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import usePost from '../hooks/usePost'
 
-const itemOnPageLimit = 10
+const itemsOnPageLimit = 10
 const maxPages = ref(0)
 const currentPage = ref(1)
 
+const search = ref('')
+const postItem = ref(false)
+
 const itemList = ref([])
+
+const renderedItemList = ref([])
+
+const loadItems = async () => {
+  renderedItemList.value = itemList.value = await usePost.getItemList(
+    currentPage.value,
+    itemsOnPageLimit
+  )
+}
 
 const sortOptions = [
   { value: 'title', label: 'По названию' },
   { value: 'body', label: 'По содержимому' },
   { value: 'id', label: 'По id' }
 ]
-const selectedSort = ref(sortOptions[2])
-
-const search = ref('')
-const postItem = ref(false)
-
-const loadItems = async () => {
-  await usePost.getItemList(currentPage.value, itemOnPageLimit, itemList)
-}
+const selectedSort = ref(sortOptions[0])
 
 const deleteConfirm = (id) => {
   console.log(id)
@@ -67,14 +72,16 @@ const onReset = () => {
   body.value = ''
 }
 
-const onSearch = async () => {
-  await loadItems()
-  itemList.value = usePost.searchItem(search.value, itemList.value)
-}
+watch([search, selectedSort, itemList.value], ([newSearch, newSort]) => {
+  renderedItemList.value = usePost.sortItemList(
+    newSort,
+    usePost.searchItems(newSearch, itemList.value)
+  )
+})
 
 onMounted(async () => {
-  maxPages.value = await usePost.getPagesCount(itemOnPageLimit)
   loadItems()
+  maxPages.value = await usePost.getPagesCount(itemsOnPageLimit)
 })
 </script>
 
@@ -98,14 +105,7 @@ onMounted(async () => {
       </q-dialog>
     </div>
     <div class="row">
-      <q-input
-        v-model="search"
-        @update:model-value="onSearch"
-        filled
-        autogrow
-        type="search"
-        class="col q-ml-sm"
-      >
+      <q-input v-model="search" filled autogrow type="search" class="col q-ml-sm">
         <template v-slot:append>
           <q-icon name="search" />
         </template>
@@ -115,18 +115,17 @@ onMounted(async () => {
         filled
         label="Сортировка"
         v-model="selectedSort"
-        @update:model-value="usePost.sortItemList(selectedSort.value, itemList)"
         :options="sortOptions"
       />
       <q-pagination
         class="col-7"
         v-model="currentPage"
         :max="maxPages"
-        @update:model-value="loadItems()"
+        @update:model-value="loadItems"
         direction-links
       />
     </div>
-    <div class="item" v-for="item in itemList" :key="item.id">
+    <div class="item" v-for="item in renderedItemList" :key="item.id">
       <q-card class="my-card">
         <q-card-section horizontal>
           <router-link class="itemlink" :to="'/item/' + item.id">

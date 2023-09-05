@@ -29,7 +29,7 @@ export default {
 
     getItemPicture: getItemPicture,
 
-    deleteItem: async (id, itemList = []) => {
+    deleteItem: async (id, itemList) => {
         const response = await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
         if(response?.error){ // или как там ошибка высвечивается
             Notify.create({
@@ -50,7 +50,7 @@ export default {
              
     },
 
-    getItemList: async (page, limit, itemList = []) => {
+    getItemList: async (page, limit) => {
         const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
             params: {
                 _limit: limit,
@@ -62,7 +62,7 @@ export default {
         for (const item of response.data) {
             item.image = await getItemPicture(item.id)
         }
-        itemList.value = response.data
+        return response.data
     },
 
     getPagesCount: async (limit) => {
@@ -75,15 +75,16 @@ export default {
     },
 
     sortItemList: (sortOption, itemList) => {
-        itemList.sort((item1, item2) => {
-            if(typeof item1[sortOption] === 'number')
-                return item1[sortOption] > item2[sortOption] ? 1 : -1
+
+        return itemList.slice().sort((item1, item2) => {
+            if(typeof item1[sortOption.value] === 'number')
+                return item1[sortOption.value] > item2[sortOption.value] ? 1 : -1
             else
-                return item1[sortOption]?.localeCompare(item2[sortOption])
+                return item1[sortOption.value]?.localeCompare(item2[sortOption.value])
           })
     },
 
-    searchItem: (search, itemList) => {
+    searchItems: (search, itemList) => {
         return itemList.filter(elem => elem.title.includes(search.trim().toLowerCase()))
     },
 
