@@ -97,31 +97,33 @@ onMounted(async () => {
         </q-card>
       </q-dialog>
     </div>
-    <div class="flex">
+    <div class="row">
       <q-input
         v-model="search"
         @update:model-value="onSearch"
         filled
         autogrow
         type="search"
-        class="q-ml-sm"
+        class="col q-ml-sm"
       >
         <template v-slot:append>
           <q-icon name="search" />
         </template>
       </q-input>
-      <q-pagination
-        v-model="currentPage"
-        :max="maxPages"
-        @update:model-value="loadItems()"
-        direction-links
-      />
       <q-select
+        class="col q-mr-lg"
         filled
         label="Сортировка"
         v-model="selectedSort"
         @update:model-value="usePost.sortItemList(selectedSort.value, itemList)"
         :options="sortOptions"
+      />
+      <q-pagination
+        class="col-7"
+        v-model="currentPage"
+        :max="maxPages"
+        @update:model-value="loadItems()"
+        direction-links
       />
     </div>
     <div class="item" v-for="item in itemList" :key="item.id">
@@ -132,12 +134,12 @@ onMounted(async () => {
               <q-img :src="item?.image?.url" ratio="1:1" fit="fill" width="250px" height="250px" />
             </div>
           </router-link>
-          <q-card-section>
+          <q-card-section class="col flex flex col">
             <router-link class="itemlink" :to="'/item/' + item.id">
-              <div class="text-h6">{{ item.title }}</div>
+              <div class="text-h6 bord">{{ item.title }}</div>
               <div>{{ item.body }}</div>
             </router-link>
-            <div class="flex column-reverse">
+            <div class="flex col items-end justify-end q-ma-xs">
               <q-btn
                 color="primary"
                 icon="delete"
@@ -155,6 +157,14 @@ onMounted(async () => {
 </template>
 
 <style>
+.bord {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+}
+
+.bre {
+  background-color: aqua;
+}
+
 .item {
   align-content: center;
   padding: 10px;
