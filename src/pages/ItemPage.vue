@@ -7,7 +7,7 @@ import usePost from '@/hooks/usePost'
 const route = useRoute()
 const item = ref()
 const picture = ref()
-const test = ref()
+const test2 = ref()
 
 const useNotif = () => {
   Notify.create('Messege')
