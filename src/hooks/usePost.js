@@ -1,12 +1,7 @@
 import axios from 'axios';
 import { Notify } from "quasar";
 
-const getItemPicture = async (id) => {
-    const { data } = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id%100}/photos?id=${id}`)
 
-    return data[0]
-
-}
 
 export default {
 
@@ -27,7 +22,12 @@ export default {
         return data
     },
 
-    getItemPicture: getItemPicture,
+    getItemPicture: async (id) => {
+        const { data } = await axios.get(`https://jsonplaceholder.typicode.com/posts/${id%100}/photos?id=${id}`)
+    
+        return data[0]
+    
+    },
 
     deleteItem: async (id, itemList) => {
         const response = await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
@@ -46,8 +46,7 @@ export default {
                     itemList.splice(item,1)
                 }
             }  
-        }
-             
+        }      
     },
 
     getItemList: async (page, limit) => {
@@ -60,7 +59,7 @@ export default {
             return { error: respError} 
         })
         for (const item of response.data) {
-            item.image = await getItemPicture(item.id)
+            item.image = await this.getItemPicture(item.id)
         }
         return response.data
     },
