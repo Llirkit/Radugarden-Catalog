@@ -5,6 +5,6 @@
 export default {
 
 }
-</script>фыв
+</script>
 <style>
 </style>
