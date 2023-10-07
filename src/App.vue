@@ -5,6 +5,6 @@
 export default {
 
 }
-</script>
+</script>ы
 <style>
 </style>
