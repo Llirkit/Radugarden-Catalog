@@ -3,11 +3,6 @@
 </template>
 <script>
 export default {
- default{
-   return {
-     t: "asd"
-   }
- }
 
 }
 </script>
